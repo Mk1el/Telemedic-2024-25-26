@@ -36,11 +36,12 @@ app.get('/login', (req, res) => {
 app.get('/patients_page', (req, res) => {
     res.render('patients_page');
 });
+app.get('/book_appointments',(req,res)=>{
+    res.render('book_appointments');
+})
 const adminRoutes = require('./routes/admin');
 app.use('/admin', adminRoutes);
 
-const appointmentRoutes = require('./routes/appointments');
-app.use('/appointments' ,appointmentRoutes);
 // Ensure routes are correctly set up
 app.use('/', require('./routes/pages'));
 app.use('/auth', require('./routes/auth'));

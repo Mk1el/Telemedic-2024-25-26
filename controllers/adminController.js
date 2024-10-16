@@ -53,3 +53,24 @@ exports.getDoctors = async (req, res) => {
         res.status(500).send('Error fetching doctors. Please try again later.');
     }
 };
+exports.showAddAppointmentForm = (req, res) => {
+    res.render('add_appointments', { title: 'Add New Appointment' });
+};
+
+exports.addAppointments = async (req, res) => {
+    const { action, p_id, d_id, appointment_date, appointment_time } = req.body;
+
+    try {
+        if (action === 'add_appointments') {
+            await db.query('INSERT INTO appointments (p_id, d_id, appointment_date, appointment_time, status) VALUES (?, ?, ?, ?, ?)', 
+                [p_id, d_id, appointment_date, appointment_time, 'scheduled']);
+            return res.redirect('/admin/appointments');
+        } else {
+            return res.status(400).send('Invalid action');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        return res.status(500).send('Server error while processing request');
+    }
+};
+

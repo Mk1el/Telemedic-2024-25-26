@@ -74,7 +74,7 @@ exports.patients_page = async (req, res) => {
     try {
         const patientId = req.session.patientId;
 
-        // Fetch patient details from the database
+        
         const [patients] = await db.query('SELECT first_name, last_name, phone, date_of_birth, gender, address FROM patients WHERE id = ?', [patientId]);
 
         // Check if patient exists
@@ -89,7 +89,23 @@ exports.patients_page = async (req, res) => {
         return res.status(500).send('Server error while fetching patient data');
     }
 };
+exports.bookAppointments = async (req, res) => {
+    const { user_id, doctor_id, appointment_date, appointment_time, notes, duration } = req.body;
 
+    try {
+        const sql = `
+            INSERT INTO Appointments (user_id, doctor_id, appointment_date, appointment_time, notes, duration)
+            VALUES (?, ?, ?, ?, ?, ?)
+        `;
+
+        await db.query(sql, [user_id, doctor_id, appointment_date, appointment_time, notes, duration]);
+        
+        res.status(200).send('Appointment booked successfully');
+    } catch (error) {
+        console.error('Error booking appointment:', error);
+        res.status(500).send('Error booking appointment');
+    }
+};
 exports.logout = (req, res) => {
     req.session.destroy(err => {
         if (err) {

@@ -16,8 +16,9 @@ router.get('/login',(req, res)=>{
 router.get('/patients_page',(req, res)=>{
     res.render('patients_page');
 })
-router.get('/appointment',(req,res)=>{
-    res.render('appointment')
+router.get('/book_appointments',(req,res)=>{
+    res.render('book_appointments')
 })
+
 router.get('/logout', authController.logout);
 module.exports = router;
