@@ -89,6 +89,21 @@ exports.patients_page = async (req, res) => {
         return res.status(500).send('Server error while fetching patient data');
     }
 };
+
+exports.getDoctors = async (req, res) => {
+    try {
+        const [doctors] = await db.query("SELECT * FROM Doctors");
+        
+        // Log the retrieved doctors to ensure data is fetched
+        console.log(doctors);
+        
+        res.render('doctors', { title: 'Doctors Available', doctors });
+    } catch (error) {
+        console.error("Error fetching doctors:", error.message);
+        res.status(500).send('Error fetching doctors. Please try again later.');
+    }
+};
+
 exports.bookAppointments = async (req, res) => {
     const { user_id, doctor_id, appointment_date, appointment_time, notes, duration } = req.body;
 

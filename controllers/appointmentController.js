@@ -1,7 +1,7 @@
 const pool = require('../config/db');
 
 // Create Appointment
-exports.createAppointment = (req, res) => {
+exports.addAppointment = (req, res) => {
     const { p_id, d_id, appointment_date, appointment_time, status } = req.body;
 
     const query = 'INSERT INTO Appointments (p_id, d_id, appointment_date, appointment_time, status) VALUES (?, ?, ?, ?, ?)';

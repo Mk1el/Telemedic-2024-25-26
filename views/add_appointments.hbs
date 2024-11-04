@@ -29,14 +29,14 @@
     <div class="container mt-4">
         <h1>Add Appointment</h1>
         <div class="form-container">
-            <form id="appointmentForm" action="/admin/appointments/add" method="POST">
+            <form id="appointmentForm" action="/admin/add_appointments" method="POST">
                 <div class="mb-3">
                     <label for="patient_id" class="form-label">Patient ID</label>
-                    <input type="number" class="form-control" id="patient_id" name="patient_id" required>
+                    <input type="number" class="form-control"name="p_id" id="patient_id"  required>
                 </div>
                 <div class="mb-3">
                     <label for="doctor_id" class="form-label">Doctor ID</label>
-                    <input type="number" class="form-control" id="doctor_id" name="doctor_id" required>
+                    <input type="number" class="form-control" id="doctor_id" name="d_id" required>
                 </div>
                 <div class="mb-3">
                     <label for="appointment_date" class="form-label">Appointment Date</label>
@@ -44,8 +44,18 @@
                 </div>
                 <div class="mb-3">
                     <label for="appointment_time" class="form-label">Appointment Time</label>
-                    <input type="time" class="form-control" id="appointment_time" name="appointment_time" required>
+                    <input type="time" class="form-control" id="appointment_time" name="appoint_time" required>
                 </div>
+                <div class="mb-3">
+    <label for="appointment_status" class="form-label">Appointment Status</label>
+    <select class="form-select" id="appointment_status" name="status" required>
+        <option value="" disabled selected>Select Status</option>
+        <option value="scheduled">Scheduled</option>
+        <option value="completed">Completed</option>
+        <option value="canceled">Canceled</option>
+        <option value="rescheduled">Rescheduled</option>
+    </select>
+</div>
                 <button type="submit" class="btn btn-primary">Add Appointment</button>
                 <div id="error-message" class="text-danger mt-2"></div>
             </form>

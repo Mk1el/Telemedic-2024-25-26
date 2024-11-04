@@ -1,0 +1,40 @@
+<div id="doctor-schedule" class="collapse mb-4">
+            <h2>Doctor Schedule</h2>
+            <table class="table table-striped" id="doctorScheduleTable">
+               <div id="doctor-schedule" class="collapse mb-4">
+    <h2>Doctor Schedule</h2>
+    <table class="table table-striped" id="doctorScheduleTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Email</th>
+                <th>Schedule</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="doctorScheduleBody">
+            {{#if doctor.length}}
+                {{#each doctors}}
+                <tr>
+                    <td>{{this.first_name}} {{this.last_name}}</td>
+                    <td>{{this.specialization}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.schedule}}</td>
+                    <td>
+                        <button class="btn btn-primary" data-doctor-id="{{this.d_id}}">Schedule Appointment</button>
+                    </td>
+                </tr>
+                {{/each}}
+            {{else}}
+                <tr>
+                    <td colspan="5">No doctors available.</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+</div>
+
+        </table>
+
+    </div>

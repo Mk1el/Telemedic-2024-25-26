@@ -4,159 +4,172 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style.css">
     <style>
         body {
-    background-color: #f8f9fa; /* Light background */
-    color: #343a40; /* Dark text for contrast */
-}
+            background-color: #f8f9fa; 
+            color: #343a40; 
+            padding-top: 160px; /* Space for the fixed header */
+        }
 
-header {
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white;
-}
+        header {
+            background-color: #007bff; 
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 0;
+            height: 100px;
+            z-index: 1000;
+        }
 
-.nav-link {
-    color: #ffffff !important; /* White text for nav links */
-}
+        nav {
+            background-color: #0056b3; 
+        }
 
-.nav-link:hover {
-    text-decoration: underline; /* Underline on hover */
-}
+        .nav-link {
+            color: orange;
+            text-transform: uppercase;
+            font-size: large;
+        }
 
-.card {
-    border-radius: 1rem; /* Rounded corners */
-}
+        .nav-link:hover {
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-.card-body {
-    background: linear-gradient(135deg, #6f42c1 0%, #d63384 100%); /* Gradient background */
-    color: white;
-}
+        .card {
+            border-radius: 1rem; /* Rounded corners */
+        }
 
-.btn-success {
-    background-color: #28a745; /* Green button */
-    border: none;
-}
+        .card-body {
+            background: linear-gradient(135deg, #6f42c1 0%, #d63384 100%); /* Gradient background */
+            color: white;
+        }
 
-.btn-success:hover {
-    background-color: #218838; /* Darker green on hover */
-}
+        .btn-success {
+            background-color: #28a745; /* Green button */
+            border: none;
+        }
 
-h1, .lead {
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Text shadow for depth */
-}
+        .btn-success:hover {
+            background-color: #218838; /* Darker green on hover */
+        }
 
-/* Responsive adjustments */
-@media (max-width: 576px) {
-    .card-body {
-        text-align: center; /* Center text on smaller screens */
-    }
-}
+        h1, .lead {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); /* Text shadow for depth */
+        }
 
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .card-body {
+                text-align: center; /* Center text on smaller screens */
+            }
+        }
     </style>
     <title>Home Page</title>
 </head>
 <body>
-    <div class="container-fluid bg-light">
-        <header class="py-3 text-center">
-            <h4>Welcome to Telemedicine</h4>
-            <nav>
-                <ul class="nav justify-content-center">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/login">Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/register">Register</a>
-                    </li>
-                </ul>
-            </nav>
-        </header>
+    <header class="py-3 text-center">
+        <h4>Welcome to MoseH Telemed Application</h4>
+        <nav>
+            <ul class="nav justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Patient Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/register">Patient Registration</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/doctors_login">Doctors Login</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
-        <div class="container mt-4">
-            <div class="card shadow">
-                <div class="card-body">
-                    <h1 class="display-4 text-primary">Welcome, Patients!</h1>
-                    <p class="lead">This site is to help patients who cannot access health care.</p>
-                    <hr class="my-4">
-                    <p>We offer various telemedicine services to connect you with healthcare professionals.</p>
-                    <a class="btn btn-success btn-lg" href="#" role="button">Learn More</a>
+    <div class="container mt-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h1 class="display-4 text-primary">Welcome, Patients and Doctors!</h1>
+                <p class="lead">This site is to help patients who cannot access health care services for them to meet our Doctors.</p>
+                <hr class="my-4">
+                <p>We offer various telemedicine services to connect you with healthcare professionals.</p>
+                <a class="btn btn-success btn-lg" href="/about" role="button">Learn More</a>
+            </div>
+        </div>
+
+        <section class="mt-5">
+            <h2 class="text-center">Our Services</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Virtual Consultations</h5>
+                            <p class="card-text">Connect with doctors from the comfort of your home through video consultations.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Prescription Services</h5>
+                            <p class="card-text">Get prescriptions sent directly to your pharmacy after a consultation.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">Health Monitoring</h5>
+                            <p class="card-text">Monitor your health with our remote monitoring services and regular check-ins.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </section>
 
-            <section class="mt-5">
-                <h2 class="text-center">Our Services</h2>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Virtual Consultations</h5>
-                                <p class="card-text">Connect with doctors from the comfort of your home through video consultations.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Prescription Services</h5>
-                                <p class="card-text">Get prescriptions sent directly to your pharmacy after a consultation.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <h5 class="card-title">Health Monitoring</h5>
-                                <p class="card-text">Monitor your health with our remote monitoring services and regular check-ins.</p>
-                            </div>
+        <section class="mt-5">
+            <h2 class="text-center">Benefits of Telemedicine</h2>
+            <ul class="list-group">
+                <li class="list-group-item">Convenient access to healthcare professionals.</li>
+                <li class="list-group-item">Reduced travel time and costs.</li>
+                <li class="list-group-item">Increased flexibility in scheduling appointments.</li>
+                <li class="list-group-item">Improved health outcomes through timely consultations.</li>
+            </ul>
+        </section>
+
+        <section class="mt-5">
+            <h2 class="text-center">Testimonials</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <p class="card-text">"Telemedicine has changed my life! I can consult my doctor without leaving my house." - Sarah K.</p>
                         </div>
                     </div>
                 </div>
-            </section>
-
-            <section class="mt-5">
-                <h2 class="text-center">Benefits of Telemedicine</h2>
-                <ul class="list-group">
-                    <li class="list-group-item">Convenient access to healthcare professionals.</li>
-                    <li class="list-group-item">Reduced travel time and costs.</li>
-                    <li class="list-group-item">Increased flexibility in scheduling appointments.</li>
-                    <li class="list-group-item">Improved health outcomes through timely consultations.</li>
-                </ul>
-            </section>
-
-            <section class="mt-5">
-                <h2 class="text-center">Testimonials</h2>
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">"Telemedicine has changed my life! I can consult my doctor without leaving my house." - Sarah K.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">"I love the convenience of being able to get my prescriptions online." - John D.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                <p class="card-text">"The doctors are very attentive and I feel like I'm getting great care!" - Emily R.</p>
-                            </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <p class="card-text">"I love the convenience of being able to get my prescriptions online." - John D.</p>
                         </div>
                     </div>
                 </div>
-            </section>
-
-        </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <p class="card-text">"The doctors are very attentive and I feel like I'm getting great care!" - Emily R.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="/script.js"></script>
 </body>
 </html>

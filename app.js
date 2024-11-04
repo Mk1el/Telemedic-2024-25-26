@@ -36,6 +36,9 @@ app.get('/login', (req, res) => {
 app.get('/patients_page', (req, res) => {
     res.render('patients_page');
 });
+app.get('doctors_patientpage',(req,res)=>{
+    res.render('doctors_patientpage');
+})
 app.get('/book_appointments',(req,res)=>{
     res.render('book_appointments');
 })

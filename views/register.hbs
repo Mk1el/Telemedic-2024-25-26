@@ -8,9 +8,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Home page</h1>
     <nav>
-        <h4>Welcome to telemedicine</h4>
+        <h4>Welcome to MoseH Telemedics</h4>
         <ul class="list-unstyled">
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
@@ -103,13 +102,12 @@
 
             // Validate Phone Number
             const phone = document.getElementById('phone').value;
-            const phonePattern = /^[0-9]{10}$/; // Adjust pattern as needed for your requirements
+            const phonePattern = /^[0-9]{10}$/; 
             if (!phonePattern.test(phone)) {
                 message += 'Please enter a valid phone number (10 digits).\n';
                 valid = false;
             }
 
-            // Validate Date of Birth
             if (!document.getElementById('date_of_birth').value) {
                 message += 'Date of Birth is required.\n';
                 valid = false;
