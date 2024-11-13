@@ -11,6 +11,8 @@
             color: #343a40; 
             padding-top: 100px; /* Space for the fixed header */
             display: flex;
+            flex-direction: column;
+            min-height: 100vh; /* Make sure body takes full height */
         }
 
         header {
@@ -23,6 +25,25 @@
             padding: 20px 0;
             height: 100px;
             z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px; /* More space for icons */
+        }
+
+        .header-title {
+            font-size: 24px;
+        }
+
+        .header-icons i {
+            font-size: 1.5rem;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .header-icons i:hover {
+            color: #d4d4d4; /* Change color on hover */
         }
 
         .sidebar {
@@ -71,71 +92,146 @@
         }
 
         .content {
-            margin-left: 270px; /* Adjusted for sidebar width */
+            margin-left: 270px; 
             padding: 20px;
             width: calc(100% - 270px);
+            flex-grow: 1; 
         }
 
         .icon {
             margin-right: 10px;
         }
+
+        footer {
+            background-color: black;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .form-section {
+            display: none; /* Hide all forms by default */
+        }
+
+        .active-form {
+            display: block; /* Only show the active form */
+        }
     </style>
-    <title>Doctors Page</title>
+    <title>Doctor Profile</title>
 </head>
 <body>
-    <header class="py-3 text-center">
-        <h4>Our Doctors</h4>
+    <header>
+        <div class="header-title">
+            <h4>Doctor Profile</h4>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-bell" title="Notifications"></i>
+            <i class="fas fa-cogs" title="Settings"></i>
+            <i class="fas fa-sign-out-alt" title="Logout"></i>
+        </div>
     </header>
 
     <div class="sidebar">
         <ul class="nav flex-column">
             <li class="nav-item">
-                <a class="nav-link" href="/"><i class="fas fa-home icon"></i>Home</a>
+                <a class="nav-link" href="javascript:void(0)" onclick="showForm('home')"><i class="fas fa-home icon"></i>Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/update_profile"><i class="fas fa-user-edit icon"></i>Update Profile</a>
+                <a class="nav-link" href="javascript:void(0)" onclick="showForm('update_profile')"><i class="fas fa-user-edit icon"></i>Update Profile</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/patient_appointments"><i class="fas fa-calendar-check icon"></i>Patients Appointments</a>
+                <a class="nav-link" href="javascript:void(0)" onclick="showForm('patient_appointments')"><i class="fas fa-calendar-check icon"></i>Patients Appointments</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/schedules"><i class="fas fa-clock icon"></i>Schedule Appointments</a>
+                <a class="nav-link" href="javascript:void(0)" onclick="showForm('schedule_appointments')"><i class="fas fa-clock icon"></i>Schedule Appointments</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link active" href="/doctors_page"><i class="fas fa-user-md icon"></i>Video Calls</a>
+                <a class="nav-link" href="javascript:void(0)" onclick="showForm('video_calls')"><i class="fas fa-user-md icon"></i>Video Calls</a>
             </li>
         </ul>
     </div>
 
     <div class="content">
+        <!-- Notification -->
         <div class="notification">
-            <strong>Notification:</strong> You have new messages from your doctors!
+            <strong>Notification:</strong> You have new messages from your patients!
         </div>
 
-        <h2 class="text-center">Meet Our Doctors</h2>
-        <div class="row">
-            {{#each doctors}}
-            <div class="col-md-4">
-                <div class="card doctor-card mb-4">
-                    <div class="doctor-card-body">
-                        <h5 class="card-title">{{this.name}}</h5>
-                        <p class="card-text"><strong>Specialty:</strong> {{this.specialty}}</p>
-                        <p class="card-text"><strong>Experience:</strong> {{this.experience}} years</p>
-                        <p class="card-text"><strong>Education:</strong> {{this.education}}</p>
-                        <p class="card-text"><strong>Location:</strong> {{this.location}}</p>
-                        <p class="card-text"><strong>Languages:</strong> {{this.languages}}</p>
-                        <p class="card-text"><strong>Contact:</strong> <a href="mailto:{{this.email}}">{{this.email}}</a></p>
-                        <a href="/doctor/{{this.id}}" class="btn btn-success">View Profile</a>
-                    </div>
+        <!-- Home Content (hidden by default) -->
+        <div id="home" class="form-section active-form">
+            <h2>Welcome to the Doctor Dashboard</h2>
+            <p>Here you can manage your profile, schedule appointments, and interact with patients.</p>
+        </div>
+
+        <!-- Update Profile Form -->
+        <div id="update_profile" class="form-section">
+            <h3>Update Your Profile</h3>
+            <form action="/update_profile" method="POST">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
                 </div>
-            </div>
-            {{/each}}
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+
+        <!-- Patient Appointments -->
+        <div id="patient_appointments" class="form-section">
+            <h3>Manage Patient Appointments</h3>
+            <p>Here you can view and manage your appointments with patients.</p>
+        </div>
+
+        <!-- Schedule Appointments -->
+        <div id="schedule_appointments" class="form-section">
+            <h3>Schedule an Appointment</h3>
+            <form action="/schedule_appointment" method="POST">
+                <div class="mb-3">
+                    <label for="appointment_date" class="form-label">Appointment Date</label>
+                    <input type="date" class="form-control" id="appointment_date" name="appointment_date" required>
+                </div>
+                <div class="mb-3">
+                    <label for="appointment_time" class="form-label">Appointment Time</label>
+                    <input type="time" class="form-control" id="appointment_time" name="appointment_time" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Schedule Appointment</button>
+            </form>
+        </div>
+
+        <!-- Video Calls -->
+        <div id="video_calls" class="form-section">
+            <h3>Video Call Instructions</h3>
+            <p>Click the link below to start a video call with your patients:</p>
+            <a href="https://zoom.us/j/your_meeting_id" class="btn btn-success" target="_blank">Join Video Call</a>
         </div>
     </div>
 
-    <footer class="text-center mt-5">
+    <footer>
         <p>&copy; 2024 TeleMed. All Rights Reserved.</p>
     </footer>
+
+    <script>
+        function showForm(formId) {
+            // Hide all sections
+            const sections = document.querySelectorAll('.form-section');
+            sections.forEach(function(section) {
+                section.classList.remove('active-form');
+            });
+            
+            // Show the clicked section
+            const activeSection = document.getElementById(formId);
+            if (activeSection) {
+                activeSection.classList.add('active-form');
+            }
+        }
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

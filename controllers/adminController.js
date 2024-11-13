@@ -50,28 +50,46 @@ exports.addDoctor = async (req, res) => {
         res.status(500).send('Server error while adding doctor');
     }
 };
-
+exports.getDoctors = async (req, res) => {
+    try {
+        const [doctors] = await db.query("SELECT * FROM Doctors");
+        
+        // Log the retrieved doctors to ensure data is fetched
+        console.log(doctors);
+        
+        res.render('doctors', { title: 'Doctors Available', doctors });
+    } catch (error) {
+        console.error("Error fetching doctors:", error.message);
+        res.status(500).send('Error fetching doctors. Please try again later.');
+    }
+};
 exports.showAddAppointmentForm = (req, res) => {
     res.render('add_appointments', { title: 'Add New Appointment' });
 };
 
 exports.addAppointments = async (req, res) => {
-    const { patient_id, doctor_id, appointment_date, appointment_time, appointment_status } = req.body;
+    const { patient_id, doctor_id, appointment_date, appointment_time, status } = req.body;
 
-    if (!patient_id || !doctor_id || !appointment_date || !appointment_time || !appointment_status) {
+    // Ensure all required fields are present
+    if (!patient_id || !doctor_id || !appointment_date || !appointment_time || !status) {
         return res.status(400).send('All fields are required');
     }
 
     try {
-        await db.query('INSERT INTO appointments (p_id, d_id, appointment_date, appoint_time, status) VALUES (?, ?, ?, ?, ?)', 
-            [patient_id, doctor_id, appointment_date, appointment_time, appointment_status]);
+        // Insert into the database
+        await db.query(
+            'INSERT INTO appointments (patient_id, doctor_id, appointment_date, appointment_time, status) VALUES (?, ?, ?, ?, ?)', 
+            [patient_id, doctor_id, appointment_date, appointment_time, status]
+        );
 
+        // Redirect to the appointments page
         return res.redirect('/admin/appointments');
     } catch (error) {
         console.error('Error:', error);
         return res.status(500).send('Server error while processing request');
     }
 };
+
 exports.getAppointments = async (req, res) => {
     try {
         const [appointments] = await db.query("SELECT * FROM Appointments"); 

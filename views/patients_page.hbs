@@ -4,67 +4,178 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="/style.css">
-    <title>Patients Page</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Patient Portal</title>
     <style>
+        /* Existing CSS styles here */
         body {
             background-color: #f8f9fa;
+            margin-left: 200px;
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
         }
+
         h1 {
             color: #007bff;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
         }
+
         .lead {
             color: #6c757d;
         }
+
         .image-section img {
             max-width: 100%;
             height: auto;
             border-radius: 10px;
         }
+
         .card {
             margin-bottom: 20px;
             transition: transform 0.2s;
         }
+
         .card:hover {
             transform: scale(1.05);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
+
         .nav-link {
             transition: background-color 0.3s, color 0.3s;
+            font-size: 16px;
+            padding-left: 30px;
         }
+
         .nav-link:hover {
             background-color: #007bff;
             color: white;
         }
-        .btn-success:hover {
-            background-color: #28a745;
-            border-color: #218838;
+
+        .nav-link i {
+            font-size: 18px;
+            margin-right: 10px;
         }
+
         .modal-content {
             border-radius: 10px;
         }
+
         .appointment-icon {
             font-size: 24px;
             margin-right: 10px;
             color: #007bff;
         }
+
+        header {
+            background-color: #007bff;
+            color: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 0;
+            height: 100px;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 40px;
+        }
+
+        .header-title {
+            font-size: 24px;
+        }
+
+        .header-icons i {
+            font-size: 1.5rem;
+            margin-left: 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .header-icons i:hover {
+            color: #d4d4d4;
+        }
+
+        .nav {
+            position: fixed;
+            top: 100px;
+            left: 0;
+            width: 200px;
+            height: 100vh;
+            z-index: 500;
+            background-color: #f8f9fa;
+            padding-top: 20px;
+            border-right: 1px solid #ddd;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        footer {
+            background-color: black;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: relative;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        .container {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .header-title {
+                font-size: 18px;
+            }
+
+            .header-icons i {
+                font-size: 1.2rem;
+            }
+
+            .nav {
+                width: 200px;
+            }
+
+            footer {
+                font-size: 14px;
+            }
+
+            body {
+                margin-left: 0;
+            }
+        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
+
+    <header>
+        <div class="header-title">
+            <h4>Patient Portal</h4>
+        </div>
+        <div class="header-icons">
+            <i class="fas fa-bell" title="Notifications"></i>
+            <i class="fas fa-cogs" title="Settings"></i>
+            <i class="fas fa-user" title="Profile" id="profile-icon" onclick="window.location.href='/profile'"></i>
+            <i class="fas fa-sign-out-alt" title="Logout" onclick="window.location.href='/logout'"></i>
+        </div>
+    </header>
+
+    <nav class="nav flex-column">
+        <a class="nav-link active" href="#appointments" data-bs-toggle="collapse"><i class="fas fa-calendar-alt"></i>Your Appointments</a>
+        <a class="nav-link" href="#bookAppointmentModal" data-bs-toggle="modal"><i class="fas fa-calendar-plus"></i>Book Appointment</a>
+        <a class="nav-link" href="#doctor-schedule" data-bs-toggle="collapse"><i class="fas fa-user-md"></i>Doctor Schedule</a>
+        <a class="nav-link" href="https://zoom.us/j/your_meeting_id" target="_blank" rel="noopener noreferrer"><i class="fas fa-video"></i>Video Call</a>
+        <a class="nav-link" href="#update-profile" data-bs-toggle="collapse"><i class="fas fa-user-edit"></i> Update Profile</a>
+        <a class="nav-link btn btn-danger" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </nav>
+
     <div class="container mt-4">
-        <h1 class="text-center mb-4">Welcome to Your Patient Portal, {{patients.first_name}}!</h1>
-
-        <nav class="nav nav-pills flex-column flex-sm-row mb-4">
-            <a class="flex-sm-fill text-sm-center nav-link active" href="#appointments" data-bs-toggle="collapse"><i class="fas fa-calendar-alt appointment-icon"></i>Your Appointments</a>
-            <a class="flex-sm-fill text-sm-center nav-link" href="#bookAppointmentModal" data-bs-toggle="modal"><i class="fas fa-calendar-plus appointment-icon"></i>Book Appointment</a>
-            <a class="flex-sm-fill text-sm-center nav-link" href="/doctors_patientpage"><i class="fas fa-user-md appointment-icon"></i>Doctor Schedule</a>
-            <a class="flex-sm-fill text-sm-center nav-link" href="https://zoom.us/j/your_meeting_id" target="_blank" rel="noopener noreferrer"><i class="fas fa-video appointment-icon"></i>Video Call</a>
-            <a class="flex-sm-fill text-sm-center nav-link" href="#update-profile" data-bs-toggle="collapse"><i class="fas fa-user-edit appointment-icon"></i>Update Profile</a>
-            <a class="flex-sm-fill text-sm-center nav-link btn btn-danger" href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
-        </nav>
-
+        <h1 class="text-center mb-4">Welcome to Your Patient Portal, {{patients.name}}!</h1>
         <div class="text-center mb-4">
             <p class="lead">At our telemedicine platform, we prioritize your health and well-being. Our experienced team is here to assist you every step of the way.</p>
         </div>
@@ -73,89 +184,48 @@
             <img src="https://via.placeholder.com/800x300?text=Telemedicine+Care" alt="Telemedicine Care">
         </div>
 
-        <div id="doctor-schedule" class="collapse mb-4">
-            <h2>Doctor Schedule</h2>
-            <table class="table table-striped" id="doctorScheduleTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Specialization</th>
-                        <th>Email</th>
-                        <th>Schedule</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="doctorScheduleBody">
-            {{#each doctors}}
+        <!-- Doctor Schedule Collapse -->
+     <!-- Doctor Schedule Section -->
+<div id="doctor-schedule" class="collapse mb-4">
+    <h2>Doctor Schedule</h2>
+    <table class="table table-striped" id="doctorScheduleTable">
+        <thead>
             <tr>
-                <td>{{this.first_name}}</td>
-                <td>{{this.specialization}}</td>
-                <td>{{this.email}}</td>
-                <td>{{this.schedule}}</td>
-                <td>
-                    <button class="btn btn-primary" data-doctor-id="{{this.d_id}}">Schedule Appointment</button>
-                </td>
+                <th>Name</th>
+                <th>Specialization</th>
+                <th>Email</th>
+                <th>Available Days</th>
+                <th>Action</th>
             </tr>
-            {{/each}}
-            </tbody>
-        </table>
+        </thead>
+        <tbody id="doctorScheduleBody">
+            {{#if doctors.length}} <!-- Check if there are doctors -->
+                {{#each doctors}} <!-- Iterate over doctors -->
+                    <tr>
+                        <td>{{this.name}}</td> <!-- Doctor's name -->
+                        <td>{{this.specialty}}</td> <!-- Doctor's specialty -->
+                        <td>{{this.email}}</td> <!-- Doctor's email -->
+                        <td>{{this.available_days}}</td> <!-- Available days -->
+                        <td>
+                            <button class="btn btn-primary" onclick="bookAppointment({{this.doctor_id}})">Book Appointment</button>
+                        </td>
+                    </tr>
+                {{/each}}
+            {{else}} <!-- If no doctors available -->
+                <tr>
+                    <td colspan="5">No doctor schedules available.</td>
+                </tr>
+            {{/if}}
+        </tbody>
+    </table>
+</div>
 
-    </div>
+<!-- Optionally, you can add a button to toggle the schedule view -->
+<button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#doctor-schedule" aria-expanded="false" aria-controls="doctor-schedule">
+    Toggle Doctor Schedule
+</button>
 
-        <div id="appointments" class="collapse mb-4">
-            <h2>Your Appointments</h2>
-            <div id="appointmentsList" class="list-group"></div>
-        </div>
-
-        <div id="update-profile" class="collapse mb-4">
-            <h2>Update Profile</h2>
-            <form id="updateProfileForm">
-                <div class="mb-3">
-                    <label for="first_name" class="form-label">First Name</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="last_name" class="form-label">Last Name</label>
-                    <input type="text" class="form-control" id="last_name" name="last_name" required>
-                </div>
-                <div class="mb-3">
-                    <label for="phone" class="form-label">Phone</label>
-                    <input type="text" class="form-control" id="phone" name="phone" required>
-                </div>
-                <div class="mb-3">
-                    <label for="address" class="form-label">Address</label>
-                    <input type="text" class="form-control" id="address" name="address" required>
-                </div>
-                <button type="submit" class="btn btn-success">Update Profile</button>
-            </form>
-        </div>
-
-        <!-- Modal for Scheduling Appointment -->
-        <div class="modal fade" id="scheduleModal" tabindex="-1" aria-labelledby="scheduleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="scheduleModalLabel">Schedule Appointment with <span id="doctorName"></span></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="scheduleAppointmentForm">
-                            <div class="mb-3">
-                                <label for="appointment_date" class="form-label">Appointment Date</label>
-                                <input type="date" class="form-control" id="appointment_date" name="appointment_date" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="appointment_time" class="form-label">Appointment Time</label>
-                                <input type="time" class="form-control" id="appointment_time" name="appointment_time" required>
-                            </div>
-                            <input type="hidden" id="selectedDoctorId" name="selectedDoctorId">
-                            <button type="submit" class="btn btn-primary">Schedule</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        <!-- Modal for Booking Appointment -->
         <div class="modal fade" id="bookAppointmentModal" tabindex="-1" aria-labelledby="bookAppointmentLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -165,67 +235,123 @@
                     </div>
                     <div class="modal-body">
                         <form id="bookAppointmentForm">
+                            <!-- Patient Information -->
                             <div class="mb-3">
-                                <label for="doctor" class="form-label">Select Doctor</label>
-                                <select class="form-select" id="doctor" name="doctor" required>
-                                    <option value="">Choose...</option>
-                                    <!-- Doctor options will be populated here -->
-                                </select>
+                                <label for="patientName" class="form-label">Full Name</label>
+                                <input type="text" class="form-control" id="patientName" name="patientName" placeholder="Enter your full name" required>
                             </div>
+
+                            <div class="mb-3">
+                                <label for="dob" class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" name="dob" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email Address</label>
+                                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="appointmentReason" class="form-label">Reason for Appointment</label>
+                                <textarea class="form-control" id="appointmentReason" name="appointmentReason" placeholder="Describe your reason for the appointment" required></textarea>
+                            </div>
+
+                            <!-- Appointment Date and Time -->
                             <div class="mb-3">
                                 <label for="bookAppointment_date" class="form-label">Appointment Date</label>
                                 <input type="date" class="form-control" id="bookAppointment_date" name="appointment_date" required>
                             </div>
+
                             <div class="mb-3">
                                 <label for="bookAppointment_time" class="form-label">Appointment Time</label>
                                 <input type="time" class="form-control" id="bookAppointment_time" name="appointment_time" required>
                             </div>
-                            <button type="submit" class="btn btn-primary">Book</button>
+
+                            <!-- Preferred Consultation Method -->
+                            <div class="mb-3">
+                                <label class="form-label">Consultation Type</label><br>
+                                <input type="radio" id="inPerson" name="consultationType" value="In-Person" required> In-Person
+                                <input type="radio" id="videoCall" name="consultationType" value="Video Call"> Video Call
+                                <input type="radio" id="phoneCall" name="consultationType" value="Phone Call"> Phone Call
+                            </div>
+
+                            <!-- Consent -->
+                            <div class="mb-3">
+                                <input type="checkbox" id="terms" name="terms" required>
+                                <label for="terms" class="form-label">I Agree to the <a href="#">Terms and Conditions</a></label>
+                            </div>
+
+                            <div class="mb-3">
+                                <input type="checkbox" id="privacyConsent" name="privacyConsent" required>
+                                <label for="privacyConsent" class="form-label">I Consent to the Use of My Personal Information</label>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <button type="submit" class="btn btn-primary">Book Appointment</button>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- Profile Update Section -->
+        <div id="update-profile" class="collapse mb-4">
+            <h2>Update Profile</h2>
+            <form id="updateProfileForm" method="POST" action="/updateProfile">
+                <div class="mb-3">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{patient.first_name}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" value="{{patient.last_name}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{patient.email}}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{patient.phone}}" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </form>
+        </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <footer>
+        <p>&copy; 2024 Telemedicine Platform. All rights reserved.</p>
+    </footer>
+
     <script>
-        // Function to fetch doctor details
-        // Function to fetch doctor details
-function fetchDoctorDetails() {
-    fetch('/doctors') // Adjust this URL based on your actual endpoint
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(doctors => {
-            const tableBody = document.getElementById('doctorScheduleBody');
-            tableBody.innerHTML = ''; // Clear existing content
-            doctors.forEach(doctor => {
-                // Populate the table
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${doctor.first_name} ${doctor.last_name}</td>
-                    <td>${doctor.specialization}</td>
-                    <td>${doctor.email}</td>
-                    <td>${doctor.available_days.join(', ')}</td> <!-- Assuming available_days is an array -->
-                    <td>
-                        <button class="btn btn-primary" data-doctor-id="${doctor.d_id}" data-bs-toggle="modal" data-bs-target="#scheduleModal">Schedule Appointment</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
+        document.addEventListener("DOMContentLoaded", function () {
+            // Handle form submission
+            const form = document.getElementById("bookAppointmentForm");
+            
+
+            form.addEventListener("submit", function (event) {
+                event.preventDefault();  // Prevent the default form submission
+
+                // Get form data
+                const formData = new FormData(form);
+                window.location.href = "/appointments";  // Redirects the user to the appointments page
             });
-        })
-        .catch(error => {
-            console.error('Error fetching doctor details:', error);
+
+            // Auto-collapse section if the URL hash contains #update-profile
+            if (window.location.hash === '#update-profile') {
+                var myCollapse = new bootstrap.Collapse(document.getElementById('update-profile'), {
+                    toggle: true
+                });
+            }
         });
-}
-
-// Call the function when the page loads
-document.addEventListener('DOMContentLoaded', fetchDoctorDetails);
-
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

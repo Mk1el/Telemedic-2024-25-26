@@ -23,10 +23,10 @@
                 {{#each appointments}}
                 <tr>
                     <td>{{this.a_id}}</td>
-                    <td>{{this.d_id}}</td>
-                    <td>{{this.p_id}}</td>
+                    <td>{{this.doctor_id}}</td>
+                    <td>{{this.patient_id}}</td>
                     <td>{{this.appointment_date}}</td>
-                    <td>{{this.appoint_time}}</td>
+                    <td>{{this.appointment_time}}</td>
                     <td>{{this.status}}</td>
                     <td>
                         <button onclick="deleteAppointment({{this.id}})" class="btn btn-danger btn-sm" 
