@@ -1,4 +1,8 @@
-const pool = require('../config/db');
+const mysql = require('mysql2/promise'); 
+const bcrypt = require('bcryptjs');
+const db = require('../config/db');
+const express = require('express');
+const router = express.Router();
 
 // Create Appointment
 exports.addAppointment = (req, res) => {

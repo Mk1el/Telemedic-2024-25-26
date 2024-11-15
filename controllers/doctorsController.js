@@ -19,9 +19,8 @@ exports.login = async (req, res) => {
         const user = results[0];
 
         // Compare the password with the hashed password
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
+        if (password !== user.password) {
+            // If passwords don't match, return an error
             return res.status(401).send('Invalid email or password');
         }
 

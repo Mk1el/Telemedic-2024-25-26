@@ -45,6 +45,7 @@ router.get('/book_appointments', (req, res) => {
 });
 
 // Logout route
+router.get('/profile',authController.view);
 router.get('/logout', authController.logout);
 
 // Export the router

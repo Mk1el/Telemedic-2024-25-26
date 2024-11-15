@@ -1,10 +1,10 @@
-const express = require('express');  // Import express
-const session = require('express-session');  // Import express-session
-const dotenv = require('dotenv');  // Import dotenv
-const db = require('./config/db');  // Import your database connection (if needed)
-const path = require('path');  // Import path module
+const express = require('express');  
+const session = require('express-session'); 
+const dotenv = require('dotenv');  
+const db = require('./config/db');  
+const path = require('path');  
 
-dotenv.config({ path: './.env' });  // Load environment variables from .env file
+dotenv.config({ path: './.env' });  
 
 // Create the Express app
 const app = express();
@@ -41,11 +41,15 @@ app.get('/login', (req, res) => {
     res.render('login');
 });
 
+app.post('/doctors_login', (req, res) => {
+    res.render('doctors_login');
+});
+
 app.get('/doctors_page', (req, res) => {
     res.render('doctors_page');
 });
 
-app.get('/patients_page', (req, res) => {
+app.get('/patients_page/:id', (req, res) => {
     res.render('patients_page');
 });
 
@@ -56,7 +60,14 @@ app.post('/updateProfile', (req, res) => {
     const { first_name, last_name, email, phone } = req.body;
     console.log('Profile updated:', { first_name, last_name, email, phone });
     
-     res.redirect('/profile');
+     res.redirect('/profile/:id');
+});
+app.get('/profile', (req, res) => {
+    if (!req.session.user) {
+        // Redirect the user to login if not authenticated
+        return res.redirect('/login');
+    }
+    res.render('profile', { user: req.session.user });
 });
 app.get('/doctors_patientpage', (req, res) => {
     res.render('doctors_patientpage');

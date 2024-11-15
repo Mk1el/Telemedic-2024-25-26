@@ -160,7 +160,7 @@
         <div class="header-icons">
             <i class="fas fa-bell" title="Notifications"></i>
             <i class="fas fa-cogs" title="Settings"></i>
-            <i class="fas fa-user" title="Profile" id="profile-icon" onclick="window.location.href='/profile'"></i>
+            <i class="fas fa-user" title="Profile" onclick="checkProfile()"></i>
             <i class="fas fa-sign-out-alt" title="Logout" onclick="window.location.href='/logout'"></i>
         </div>
     </header>
@@ -175,7 +175,7 @@
     </nav>
 
     <div class="container mt-4">
-        <h1 class="text-center mb-4">Welcome to Your Patient Portal, {{patients.name}}!</h1>
+        <h1 class="text-center mb-4">Welcome to Your Patient Portal,{{patient.first_name}}</h1>
         <div class="text-center mb-4">
             <p class="lead">At our telemedicine platform, we prioritize your health and well-being. Our experienced team is here to assist you every step of the way.</p>
         </div>
@@ -186,7 +186,7 @@
 
         <!-- Doctor Schedule Collapse -->
      <!-- Doctor Schedule Section -->
-<div id="doctor-schedule" class="collapse mb-4">
+<<div id="doctor-schedule" class="collapse mb-4">
     <h2>Doctor Schedule</h2>
     <table class="table table-striped" id="doctorScheduleTable">
         <thead>
@@ -199,17 +199,22 @@
             </tr>
         </thead>
         <tbody id="doctorScheduleBody">
-            {{#if doctors.length}} <!-- Check if there are doctors -->
-                {{#each doctors}} <!-- Iterate over doctors -->
-                    <tr>
-                        <td>{{this.name}}</td> <!-- Doctor's name -->
-                        <td>{{this.specialty}}</td> <!-- Doctor's specialty -->
-                        <td>{{this.email}}</td> <!-- Doctor's email -->
-                        <td>{{this.available_days}}</td> <!-- Available days -->
-                        <td>
-                            <button class="btn btn-primary" onclick="bookAppointment({{this.doctor_id}})">Book Appointment</button>
-                        </td>
-                    </tr>
+            {{#if doctors.length}} <!-- Check if there are doctors available -->
+                {{#each doctors}} <!-- Loop through each doctor -->
+                <tr>
+                    <td>{{this.name}}</td>
+                    <td>{{this.specialty}}</td>
+                    <td>{{this.email}}</td>
+                    <td>{{this.available_days}}</td>
+                    <td>
+                        <a href="/admin/doctors/edit/{{this.doctor_id}}" class="btn btn-warning btn-sm">Edit</a>
+                        <button onclick="deleteDoctor({{this.doctor_id}})" class="btn btn-danger btn-sm"
+                                style="display:inline;"
+                                onclick="return confirm('Are you sure you want to delete this doctor?');">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
                 {{/each}}
             {{else}} <!-- If no doctors available -->
                 <tr>
@@ -219,6 +224,7 @@
         </tbody>
     </table>
 </div>
+
 
 <!-- Optionally, you can add a button to toggle the schedule view -->
 <button class="btn btn-info" data-bs-toggle="collapse" data-bs-target="#doctor-schedule" aria-expanded="false" aria-controls="doctor-schedule">
@@ -328,8 +334,8 @@
     <footer>
         <p>&copy; 2024 Telemedicine Platform. All rights reserved.</p>
     </footer>
-
     <script>
+
         document.addEventListener("DOMContentLoaded", function () {
             // Handle form submission
             const form = document.getElementById("bookAppointmentForm");
@@ -350,8 +356,19 @@
                 });
             }
         });
-    </script>
+        
+          function checkProfile() {
+        const patientId = sessionStorage.getItem('patient_id'); // Or use localStorage if you're storing it there
 
+        if (patientId) {
+            // If patient is logged in, redirect to the profile page
+            window.location.href = '/profile';
+        } else {
+            // If no patient_id found, redirect to the login page
+            window.location.href = '/login';
+        }
+    }
+</script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

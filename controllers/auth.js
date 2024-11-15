@@ -38,68 +38,142 @@ exports.register = async (req, res) => {
         return res.status(500).send('Server error during registration'); 
     }
 };
-
-exports.login = async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        // Check if the user exists by email
-        const [results] = await db.query('SELECT * FROM patients WHERE email = ?', [email]);
-
-        // If no user found
-        if (results.length === 0) {
-            return res.status(401).send('Invalid email or password');
-        }
-
-        const user = results[0];
-
-        // Compare the password with the hashed password
-        const isMatch = await bcrypt.compare(password, user.password_hash);
+exports.login = (req, res) =>{
+        console.log(req.body);
+    
+        const {email, password} = req.body
+        if(!email || !password){
+            return res.render(`login`, {
+                error: `Please Enter Email/Password`
+            }) 
+        }db.query(`select * from user where email = ?`, [email], async(Err, result)=>{
+            if(Err){
+                console.log(err);
+                
+            }else if(!result.length || !await bcrypt.compare(password, result[0].password)){
+                res.render(`login`,{
+                    error: `Incorrect Email or Password`
+                })
+            }else{
+                const token = jwt.sign({id: result[0].id }, process.env.JWT_SECRET, {
+                    expiresIn:process.env.JWT_EXPIRES,
+                })
+                const cookieoptions = {
+                    expiresIn: new Date (Date.now() + process.env.COOKIE_EXPIRES * 24 * 60 * 60 * 1000),
+                    httpOnly:true
+                }
+    
+                res.cookie("userRegister",token,cookieoptions)
+                res.json({status: "success", message: `User Login Successfully`})
+            }
+    
+        })
         
-        if (!isMatch) {
-            return res.status(401).send('Invalid email or password');
-        }
-
-        req.session.patientId = user.id; // Store patient ID in session
-        return res.redirect('/patients_page'); // Redirect to the patients page
-
-    } catch (error) {
-        console.error('Error during login:', error);
-        return res.status(500).send('Server error during login'); // Handle errors
     }
-};
+    
+    exports.view = (req, res) => {
+        // Ensure that the patient is logged in by checking the session
+        if (!req.session.patient_id) {
+            return res.redirect('/login'); // Redirect to login if not authenticated
+        }
+    
+        // Fetch the logged-in patient's profile using the patient_id from the session
+        const patientId = req.session.patient_id;
+    
+        db.query(
+            `SELECT patient_id, firstname, lastname, email, phone, gender, address, date_of_birth 
+            FROM patients WHERE patient_id = ?`, 
+            [patientId],  // Use ? to prevent SQL injection
+            (err, rows) => {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send('Error retrieving patient data.');
+                }
+    
+                // If no data found, redirect or show an error message
+                if (rows.length === 0) {
+                    return res.status(404).send('Patient not found');
+                }
+    
+                // Render the 'viewpatient' page and pass the patient data
+                res.render('viewpatient', { patient: rows[0] });
+            }
+        );
+    };
+    
+    exports.login = async (req, res) => {
+        const { email, password } = req.body;
+    
+        try {
+            // Check if the user exists by email
+            const [results] = await db.query('SELECT * FROM patients WHERE email = ?', [email]);
+    
+            // If no user found
+            if (results.length === 0) {
+                return res.status(401).send('Invalid email or password');
+            }
+    
+            const patients = results[0];
+    
+            // Compare the password with the hashed password
+            const isMatch = await bcrypt.compare(password, patients.password_hash);
+            
+            if (!isMatch) {
+                return res.status(401).send('Invalid email or password');
+            }
+            req.session.patientId = patients.patient_id; 
+            return res.redirect(`/patients_page/${patients.patient_id}`);
+    
+        } catch (error) {
+            console.error('Error during login:', error);
+            return res.status(500).send('Server error during login'); // Handle errors
+        }
+    };
+    exports.patients_page = async (req, res) => {
+        const patientId = req.params.id;  // Use the patientId from the URL parameter
+        if (!patientId) {
+            return res.redirect('/login');
+        }
+        try {
+            // Fetch patient information based on patientId from the URL
+            const [patients] = await db.query('SELECT first_name, last_name, phone, date_of_birth, gender, address FROM patients WHERE patient_id = ?', [patientId]);
+    
+            // Fetch doctor schedule information
+            const [doctors] = await db.query('SELECT doctor_id, name, specialty, email, available_days FROM Doctors');
+    
+            // Check if patient exists
+            if (!patients || patients.length === 0) {
+                return res.status(404).send('Patient not found');
+            }
+    
+            // Render the page and pass both patient and doctor data to the view
+            res.render('patient_page', {
+                patient: patients[0],  // Patient data
+                doctors: doctors       // Doctor data
+            });
+    
+        } catch (error) {
+            console.error('Error fetching data:', error);
+            return res.status(500).send('Error fetching patient or doctor data');
+        }
+    };
+    
 
-// Assuming you're checking for session data to verify if the user is logged in
-exports.patients_page = async (req, res) => {
+
+exports.profile = async(req, res) => {
     if (!req.session.patientId) {
-        return res.redirect('/login');
+        return res.redirect('/login'); // Redirect if not logged in
     }
 
-    try {
-        const patientId = req.session.patientId;
-
-        // Fetch patient information
-        const [patients] = await db.query('SELECT first_name, last_name, phone, date_of_birth, gender, address FROM patients WHERE patient_id = ?', [patientId]);
-
-        // Fetch doctor schedule information
-        const [doctors] = await db.query('SELECT doctor_id, name, specialty, email, available_days FROM Doctors');
-
-
-        // Check if patient exists
-        if (!patients || patients.length === 0) {
-            return res.status(404).send('Patient not found');
+    const patientId = req.session.patientId;
+    // Fetch patient info and render the profile page
+    db.query('SELECT * FROM patients WHERE patient_id = ?', [patientId], (err, results) => {
+        if (err || !results.length) {
+            return res.redirect('/login'); // Handle case if patient not found
         }
-
-        // Render the page and pass both patient and doctor data to the view
-        res.render('patient_page', {
-            patient: patients[0],  // Patient data
-            doctors: doctors       // Doctor data
-        });
-
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        return res.status(500).send('Error fetching patient or doctor data');
-    }
+        const patient = results[0];
+        res.render('profile', { patient }); // Assuming `profile` is the profile page template
+    });
 };
 
 exports.updateProfile = async (req, res) => {
