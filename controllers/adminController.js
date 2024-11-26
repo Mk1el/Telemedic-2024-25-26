@@ -3,10 +3,7 @@ const db = require('../config/db');
 
 exports.adminPage = async (req, res) => {
     try {
-        // Fetch patients
         const [patients] = await db.query('SELECT p_id, first_name, last_name, email, phone FROM Patients');
-
-        // Fetch doctors
         const [doctors] = await db.query('SELECT d_id, first_name, specialization, email, schedule FROM Doctors');
 
         // Render the admin page with patients and doctors
